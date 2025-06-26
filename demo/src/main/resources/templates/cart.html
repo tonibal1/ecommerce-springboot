@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="/products/shop">Shop</a>
+    <div class="navbar-nav">
+      <a class="nav-link active" href="/cart">🛒 Cart</a>
+      <a class="nav-link" href="/products">Manage Products</a>
+      <a class="nav-link" href="/categories/add">Manage Categories</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h2 class="mb-4">Shopping Cart</h2>
+
+  <div th:if="${#lists.isEmpty(items)}" class="alert alert-info">
+    Your cart is empty. <a href="/products/shop">Continue shopping</a>
+  </div>
+
+  <div th:if="${not #lists.isEmpty(items)}">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${items}">
+        <td>
+          <img th:if="${item.product.imageUrl}"
+               th:src="${item.product.imageUrl}"
+               th:alt="${item.product.name}"
+               style="width: 50px; height: 50px; object-fit: cover"
+               class="me-2">
+          <span th:text="${item.product.name}"></span>
+        </td>
+        <td th:text="${item.quantity}"></td>
+        <td>$[[${#numbers.formatDecimal(item.product.price, 1, 2)}]]</td>
+        <td>$[[${#numbers.formatDecimal(item.quantity * item.product.price, 1, 2)}]]</td>
+        <td>
+          <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+        <td colspan="2">
+          $[[${#numbers.formatDecimal(#aggregates.sum(items.![quantity * product.price]), 1, 2)}]]
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+
+    <div class="d-flex justify-content-between mt-3">
+      <form th:action="@{/cart/clear}" method="post">
+        <button type="submit" class="btn btn-warning">Clear Cart</button>
+      </form>
+      <div>
+        <a href="/products/shop" class="btn btn-primary me-2">Continue Shopping</a>
+        <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

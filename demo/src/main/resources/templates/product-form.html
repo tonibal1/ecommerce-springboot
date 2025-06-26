@@ -1,34 +1,62 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Shto Produkt</title>
+    <title>Add Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Shto Produkt</h1>
-<form th:action="@{/products/save}" method="post" th:object="${product}">
-    <label>Emri:</label>
-    <input type="text" th:field="*{name}" /><br/>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/products/shop">Shop</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/cart">🛒 Cart</a>
+            <a class="nav-link active" href="/products">Products</a>
+            <a class="nav-link" href="/categories/add">Categories</a>
+        </div>
+    </div>
+</nav>
 
-    <label>Përshkrimi:</label>
-    <input type="text" th:field="*{description}" /><br/>
+<div class="container">
+    <h2 class="mb-4">Add Product</h2>
+    <form th:action="@{/products/save}" method="post" th:object="${product}" class="col-md-6">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required />
+        </div>
 
-    <label>Çmimi:</label>
-    <input type="number" step="0.01" th:field="*{price}" /><br/>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+        </div>
 
-    <label>Image URL:</label>
-    <input type="text" th:field="*{imageUrl}" /><br/>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" required />
+        </div>
 
-    <label>Kategoria:</label>
-    <select th:field="*{category}">
-        <option value="">-- Zgjidh Kategori --</option>
-        <option th:each="category : ${categories}"
-                th:value="${category.id}"
-                th:text="${category.name}">
-        </option>
-    </select><br/>
+        <div class="mb-3">
+            <label for="imageUrl" class="form-label">Image URL:</label>
+            <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" />
+        </div>
 
-    <button type="submit">💾 Ruaj</button>
-</form>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select class="form-control" id="category" th:field="*{category}">
+                <option value="">-- Select Category --</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Save</button>
+        <a href="/products" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
