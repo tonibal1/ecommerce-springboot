@@ -3,6 +3,7 @@ package com.ecommerce.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users") // <-- kjo e zgjidh gabimin
 public class User {
 
     @Id

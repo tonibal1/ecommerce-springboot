@@ -55,4 +55,11 @@ public class ProductController {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "product-form";
     }
+    @GetMapping("/shop")
+    public String shopPage(Model model) {
+        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "shop";  // Krijo template shop.html në folder templates
+    }
+
 }

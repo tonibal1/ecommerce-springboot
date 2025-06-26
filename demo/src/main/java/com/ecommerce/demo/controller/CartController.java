@@ -1,4 +1,3 @@
-
 package com.ecommerce.demo.controller;
 
 import com.ecommerce.demo.model.Product;
@@ -24,6 +23,7 @@ public class CartController {
         this.productService = productService;
     }
 
+    // Shfaq përmbajtjen e shportës
     @GetMapping
     public String viewCart(Model model) {
         User user = getDefaultUser();
@@ -31,6 +31,7 @@ public class CartController {
         return "cart";
     }
 
+    // Shto produkt në shportë
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
@@ -40,41 +41,43 @@ public class CartController {
             Product product = productService.getProductById(productId);
             if (product != null) {
                 cartService.addToCart(user, product, quantity);
-                redirectAttributes.addFlashAttribute("message", "Product added to cart successfully");
+                redirectAttributes.addFlashAttribute("message", "Produkti u shtua në shportë me sukses!");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Product not found");
+                redirectAttributes.addFlashAttribute("error", "Produkti nuk u gjet.");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error adding product to cart");
+            redirectAttributes.addFlashAttribute("error", "Gabim gjatë shtimit në shportë.");
         }
         return "redirect:/cart";
     }
 
+    // Fshij një artikull nga shporta
     @PostMapping("/remove/{itemId}")
     public String removeFromCart(@PathVariable Long itemId,
                                  RedirectAttributes redirectAttributes) {
         try {
             cartService.removeItem(itemId);
-            redirectAttributes.addFlashAttribute("message", "Item removed from cart");
+            redirectAttributes.addFlashAttribute("message", "Artikulli u fshi me sukses.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error removing item from cart");
+            redirectAttributes.addFlashAttribute("error", "Gabim gjatë fshirjes së artikullit.");
         }
         return "redirect:/cart";
     }
 
+    // Pastro gjithë shportën
     @PostMapping("/clear")
     public String clearCart(RedirectAttributes redirectAttributes) {
         try {
             User user = getDefaultUser();
             cartService.clearCart(user);
-            redirectAttributes.addFlashAttribute("message", "Cart cleared successfully");
+            redirectAttributes.addFlashAttribute("message", "Shporta u pastrua me sukses.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error clearing cart");
+            redirectAttributes.addFlashAttribute("error", "Gabim gjatë pastrimit të shportës.");
         }
         return "redirect:/cart";
     }
 
-
+    // Përdorues i përkohshëm (derisa të vendoset Spring Security)
     private User getDefaultUser() {
         User defaultUser = new User();
         defaultUser.setId(1L);
